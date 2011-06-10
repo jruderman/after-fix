@@ -1,0 +1,26 @@
+# Tweet about how happy I am!
+bug 8527
+bug 593500
+
+# Take a nap
+bug 579522
+
+# Start using app tabs and give Margaret a hug
+bug 598587
+
+# Look for mentions of fixed bugs in test frameworks
+contents ~/trees/mozilla-central/build/automation.py.in
+contents ~/trees/mozilla-central/build/automationutils.py
+contents ~/trees/mozilla-central/tools/rb/*.*
+contents ~/trees/mozilla-central/layout/tools/reftest/*.js
+contents ~/trees/mozilla-central/testing/xpcshell/*.py
+contents ~/trees/mozilla-central/testing/mochitest/*.py
+
+# Look for mentions of fixed bugs in test manifests (slow)
+#contents *.list in ~/trees/mozilla-central/
+
+# Include a shared after-fix config file from a project's repo.
+#include ~/example-project/project.afx.txt
+
+# Scan my extra-testcases directory for things I should retest now.
+#filenames ~/extra-testcases/

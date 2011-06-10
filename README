@@ -1,0 +1,41 @@
+TRACK YOUR AFTER-FIX TASKS
+
+Create a configuration file with bugs and your corresponding after-fix tasks:
+  # Take a nap
+  bug 579522
+
+Occasionally run "after-fix.py config-file" to find out which of the
+tracked bugs have been fixed.
+
+
+PREVENT WORKAROUNDS FROM OUTLIVING THEIR PURPOSE
+
+After-fix configuration files can specify files to scan for bug mentions.
+
+  # Look for assertions we can stop ignoring.
+  contents assertions-to-ignore.txt
+
+  # Look for tests we forgot to re-enable.
+  contents *.list in ~/trees/mozilla-central/
+
+After-fix has heuristics to distinguish intentional mentions of fixed
+bugs. For example, it ignores the phrase "test for bug 123456".
+
+
+TIPS
+
+* TextWrangler users can "edit foo.js:101".
+* TextWrangler users can pipe to "edit", select "foo.js:101", and Cmd+D.
+
+
+REQUIREMENTS
+
+* Python 2.6.
+
+
+KNOWN BUGS
+
+* You have to remember to run after-fix.py, e.g. with a weekly reminder.
+* Does not warn about inaccessible or nonexistent bugs.
+* The --html option requires a local Mozilla repository.
+* Fixed bugs are listed in a silly order.

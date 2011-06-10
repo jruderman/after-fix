@@ -1,0 +1,7 @@
+Bug 618176 is FIXED
+/Users/jruderman/trees/mozilla-central/layout/tools/reftest/reftest-content.js:605
+  // FIXME/bug 618176: temporary workaround
+
+Bug 579522 is FIXED
+/Users/jruderman/scripts/expect-bug/example.afx.txt:6
+  # Take a nap
