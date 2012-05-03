@@ -36,7 +36,7 @@ bugMentionRE = re.compile(
     + r"|"
     + r"(?:https?://bugzilla\.mozilla\.org/show_bug\.cgi\?id\=(\d+)(?!\d)(?!#))"
   + r")"
-  + r"(?! \(fixed)(?! \(wontfix)(?! \(branch)(?! test code)"
+  + r"(?! \(fixed)(?! \(wontfix)(?! \(branch)(?! \(\d+ branch)(?! test code)"
   , re.IGNORECASE)
 
 assert ('123456',None) == bugMentionRE.search("FIXME: bug 123456").groups()
