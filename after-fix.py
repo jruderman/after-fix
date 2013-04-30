@@ -30,7 +30,7 @@ If you do this in a shell, place quotes around filename patterns:
 # When a config file uses "contents", these heuristics control whether
 # a mention of a bug is counted.
 bugMentionRE = re.compile(
-    r"(?<!see )(?<!post )(?<!removed in )(?<!implemented in )(?<!discussion in )(?<!inspired by )(?<!test )(?<!tests for )(?<!test for )(?<!re-read )(?<! per )"
+    r"(?<!see )(?<!post )(?<!removed in )(?<!added in )(?<!landed in )(?<!implemented in )(?<!discussion in )(?<!inspired by )(?<!test )(?<!tests for )(?<!test for )(?<!re-read )(?<! per )"
     + r"(?:"
     + r"(?:bug \#?(\d+)(?!\d)(?! comment))"
     + r"|"
