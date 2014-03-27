@@ -215,7 +215,7 @@ def main():
         if verbose:
             print("Querying Bugzilla regarding " + str(len(expectList)) + " bugs which we expect to be open:")
             print(commaids)
-        r = bugSearch("id=" + commaids + "&field0-0-0=resolution&type0-0-0=not_regex&value0-0-0=^$&type0-0-1=substring&value0-0-1=fixed-in-tracemonkey&field0-0-1=status_whiteboard", bugzillaLoginPrefix)
+        r = bugSearch("id=" + commaids + "&field0-0-0=resolution&type0-0-0=not_regex&value0-0-0=^$", bugzillaLoginPrefix)
         if r.get("error"):
             print "Error from Bugzilla API:"
             print "  " + r.get("message")
@@ -240,8 +240,6 @@ def main():
     for bug in bugs:
         id = bug.get("id")
         whyShown = bug.get("resolution")
-        if whyShown == "":
-            whyShown = "fixed-in-tracemonkey"
         if htmlOutput:
             print ('<li style=margin-bottom:1em>%s: <a href="%s">Bug %s</a> -- %s' %
                 (whyShown, "https://bugzilla.mozilla.org/show_bug.cgi?id="+id, id, cgi.escape(bug.get("summary"))))
