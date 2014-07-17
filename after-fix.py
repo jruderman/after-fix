@@ -227,7 +227,7 @@ def main():
         sys.exit(0)
 
     if not bugs:
-        print "All " + str(len(expectList)) + " bugs are still open."
+        print "All " + str(len(expectList)) + " bugs do not match."
         sys.exit(0)
 
     if verbose:
