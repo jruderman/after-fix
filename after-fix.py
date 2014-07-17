@@ -182,6 +182,7 @@ def main():
     optparser.add_option("-H", "--html",     action="store_true", dest="htmlOutput",    help="output HTML with links to Bugzilla, MXR, HG Blame")
     optparser.add_option("-l", "--login",                         dest="bugzillaLogin", metavar="@", help="use this Bugzilla username (prompt for password)")
     optparser.add_option("-b", "--bug",                           dest="bugID",         help="rather than querying bugzilla, show expect-entries for this bug id")
+    optparser.add_option("-a", "--queryArgs", default = '',       dest="queryArgs",     help="query Bugzilla with additional search restrictions")
     optparser.add_option("-h", "--help",     action="callback",                         help="show this help message and exit", callback = lambda option, opt, value, parser: usage())
     (options, args) = optparser.parse_args()
     htmlOutput = options.htmlOutput
@@ -215,7 +216,7 @@ def main():
         if verbose:
             print("Querying Bugzilla regarding " + str(len(expectList)) + " bugs which we expect to be open:")
             print(commaids)
-        r = bugSearch("id=" + commaids + "&field0-0-0=resolution&type0-0-0=not_regex&value0-0-0=^$", bugzillaLoginPrefix)
+        r = bugSearch("id=" + commaids + '&' + options.queryArgs + '&' + "&field0-0-0=resolution&type0-0-0=not_regex&value0-0-0=^$", bugzillaLoginPrefix)
         if r.get("error"):
             print "Error from Bugzilla API:"
             print "  " + r.get("message")
