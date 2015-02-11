@@ -250,7 +250,7 @@ def main():
 
     for bugs in buglists:
         for bug in bugs:
-            id = bug.get("id")
+            id = str(bug.get("id"))
             whyShown = bug.get("resolution")
             if htmlOutput:
                 print ('<li style=margin-bottom:1em>%s: <a href="%s">Bug %s</a> -- %s' %
