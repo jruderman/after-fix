@@ -209,51 +209,62 @@ def main():
     else:
         parseConfig("args", os.getcwd(), [" ".join(args)])
 
-    commaids = ",".join(expectList.keys())
+
     if options.bugID:
-        bugs = [{'id': options.bugID, 'summary': "?", 'resolution': "(specified on command line)"}]
+        buglists = [[{'id': options.bugID, 'summary': "?", 'resolution': "(specified on command line)"}]]
     elif len(expectList):
-        if verbose:
-            print("Querying Bugzilla regarding " + str(len(expectList)) + " bugs which we expect to be open:")
-            print(commaids)
-        r = bugSearch("id=" + commaids + '&' + options.queryArgs + '&' + "&field0-0-0=resolution&type0-0-0=not_regex&value0-0-0=^$", bugzillaLoginPrefix)
-        if r.get("error"):
-            print "Error from Bugzilla API:"
-            print "  " + r.get("message")
-            sys.exit(0)
-        bugs = r.get("bugs")
+        buglists = []
+        expectKeys = expectList.keys()
+        BUGS_PER_QUERY = 400
+        for start in range(0, len(expectKeys), BUGS_PER_QUERY):
+            sublist = expectKeys[start : start + BUGS_PER_QUERY]
+            commaids = ",".join(sublist)
+            if verbose:
+                print("Querying Bugzilla regarding " + str(len(sublist)) + " bugs which we expect to be open:")
+                print(commaids)
+            r = bugSearch("id=" + commaids + '&' + options.queryArgs + '&' + "&field0-0-0=resolution&type0-0-0=not_regex&value0-0-0=^$", bugzillaLoginPrefix)
+            if r.get("error"):
+                print "Error from Bugzilla API:"
+                print "  " + r.get("message")
+                sys.exit(0)
+            buglists.append(r.get("bugs"))
     else:
         print "No bugs to check."
         sys.exit(0)
 
-    if not bugs:
+    nbugs = 0
+    for bugs in buglists:
+        nbugs += len(bugs)
+
+    if nbugs == 0:
         print "All " + str(len(expectList)) + " bugs do not match."
         sys.exit(0)
 
     if verbose:
-        print "Got " + str(len(bugs)) + " bug(s)"
+        print "Got " + str(nbugs) + " bug(s)"
 
     if htmlOutput:
         print '<ul>'
     else:
         print ""
 
-    for bug in bugs:
-        id = bug.get("id")
-        whyShown = bug.get("resolution")
-        if htmlOutput:
-            print ('<li style=margin-bottom:1em>%s: <a href="%s">Bug %s</a> -- %s' %
-                (whyShown, "https://bugzilla.mozilla.org/show_bug.cgi?id="+id, id, cgi.escape(bug.get("summary"))))
-            print '<ul>'
-            for message in expectList[id]:
-                print message
-            print '</ul>'
-            print '</li>'
-        else:
-            print "Bug " + id + " is " + whyShown
-            for message in expectList[id]:
-                print message
-            print ""
+    for bugs in buglists:
+        for bug in bugs:
+            id = bug.get("id")
+            whyShown = bug.get("resolution")
+            if htmlOutput:
+                print ('<li style=margin-bottom:1em>%s: <a href="%s">Bug %s</a> -- %s' %
+                    (whyShown, "https://bugzilla.mozilla.org/show_bug.cgi?id="+id, id, cgi.escape(bug.get("summary"))))
+                print '<ul>'
+                for message in expectList[id]:
+                    print message
+                print '</ul>'
+                print '</li>'
+            else:
+                print "Bug " + id + " is " + whyShown
+                for message in expectList[id]:
+                    print message
+                print ""
 
     if htmlOutput:
         print '</ul>'
