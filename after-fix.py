@@ -36,24 +36,24 @@ bugMentionRE = re.compile(
     + r"|"
     + r"(?:https?://bugzilla\.mozilla\.org/show_bug\.cgi\?id\=(\d+)(?!\d)(?!#))"
   + r")"
-  + r"(?! \(fixed)(?! \(wontfix)(?! \(branch)(?! \(\d+ branch)(?! test code)"
-  , re.IGNORECASE)
+  + r"(?! \(fixed)(?! \(wontfix)(?! \(branch)(?! \(\d+ branch)(?! test code)",
+    re.IGNORECASE)
 
-assert ('123456',None) == bugMentionRE.search("FIXME: bug 123456").groups()
-assert ('123456',None) == bugMentionRE.search("Bug 123456").groups()
-assert ('123456',None) == bugMentionRE.search("Bug 123456 will fix this").groups()
-assert ('123456',None) == bugMentionRE.search("Work around bug 123456:").groups()
-assert ('123456',None) == bugMentionRE.search("Bug 123456 (makes this testcase crash)").groups()
-assert (None,'123456') == bugMentionRE.search("http://bugzilla.mozilla.org/show_bug.cgi?id=123456").groups()
-assert (None,'123456') == bugMentionRE.search("https://bugzilla.mozilla.org/show_bug.cgi?id=123456").groups()
-assert                not bugMentionRE.search("see bug 123456")
-assert                not bugMentionRE.search("implemented in bug 123456")
-assert                not bugMentionRE.search("test for bug 123456")
-assert                not bugMentionRE.search("Bug 123456 comment 4")
-assert                not bugMentionRE.search("Bug 123456 (fixed in rev ....)")
-assert                not bugMentionRE.search("Bug 123456 (branch)")
-assert                not bugMentionRE.search("https://bugzilla.mozilla.org/show_bug.cgi?id=123456#c7")
-assert                not bugMentionRE.search("https://bugzilla.mozilla.org/show_bug.cgi?id=123456 (fixed)")
+assert ('123456', None) == bugMentionRE.search("FIXME: bug 123456").groups()
+assert ('123456', None) == bugMentionRE.search("Bug 123456").groups()
+assert ('123456', None) == bugMentionRE.search("Bug 123456 will fix this").groups()
+assert ('123456', None) == bugMentionRE.search("Work around bug 123456:").groups()
+assert ('123456', None) == bugMentionRE.search("Bug 123456 (makes this testcase crash)").groups()
+assert (None, '123456') == bugMentionRE.search("http://bugzilla.mozilla.org/show_bug.cgi?id=123456").groups()
+assert (None, '123456') == bugMentionRE.search("https://bugzilla.mozilla.org/show_bug.cgi?id=123456").groups()
+assert                 not bugMentionRE.search("see bug 123456")
+assert                 not bugMentionRE.search("implemented in bug 123456")
+assert                 not bugMentionRE.search("test for bug 123456")
+assert                 not bugMentionRE.search("Bug 123456 comment 4")
+assert                 not bugMentionRE.search("Bug 123456 (fixed in rev ....)")
+assert                 not bugMentionRE.search("Bug 123456 (branch)")
+assert                 not bugMentionRE.search("https://bugzilla.mozilla.org/show_bug.cgi?id=123456#c7")
+assert                 not bugMentionRE.search("https://bugzilla.mozilla.org/show_bug.cgi?id=123456 (fixed)")
 
 
 def bugSearch(search, bugzillaLoginPrefix):
@@ -73,8 +73,10 @@ def bugSearch(search, bugzillaLoginPrefix):
         print out
         raise
 
+
 def prettyPrint(x):
     return json.dumps(x, sort_keys=True, indent=4)
+
 
 def findFiles(base, pattern):
     if len(pattern) == 1:
@@ -90,9 +92,11 @@ def findFiles(base, pattern):
     else:
         print "### Warning: expected [filename-pattern] or [leaf-pattern in search-path] but saw " + repr(pattern)
 
+
 def readConfig(filename):
     with file(filename) as f:
         parseConfig(os.path.abspath(filename), os.path.dirname(filename), f)
+
 
 def parseConfig(absFilename, base, f):
     recentComment = ""
@@ -125,6 +129,7 @@ def parseConfig(absFilename, base, f):
                     print "### Warning: unrecognized config entry " + repr(cmd)
             recentComment = ""
 
+
 def scanFileForBugMentions(filename):
     absfn = os.path.abspath(filename)
     if htmlOutput:
@@ -144,11 +149,13 @@ def scanFileForBugMentions(filename):
                     message = "%s:%d\n  %s" % (absfn, lineno, line.strip())
                 addBug(expectList, bugid, message)
 
+
 def readFilenames(directory):
     for fn in os.listdir(directory):
         numbers = re.findall(r"\d{3,}", fn)
         for n in numbers:
             addBug(expectList, n, "Filename " + os.path.join(directory, fn))
+
 
 def addBug(list, bugid, message):
     newBug = False
@@ -158,6 +165,7 @@ def addBug(list, bugid, message):
     if verbose:
         print "  " + ("adding" if newBug else "  also") + " bug " + bugid + " (" + repr(message) + ")"
     list[bugid].append(message)
+
 
 def initHTML():
     global mcLocal, mcMXR, mcBlame
@@ -209,7 +217,6 @@ def main():
     else:
         parseConfig("args", os.getcwd(), [" ".join(args)])
 
-
     if options.bugID:
         buglists = [[{'id': options.bugID, 'summary': "?", 'resolution': "(specified on command line)"}]]
     elif len(expectList):
@@ -217,11 +224,11 @@ def main():
         expectKeys = expectList.keys()
         BUGS_PER_QUERY = 400
         for start in range(0, len(expectKeys), BUGS_PER_QUERY):
-            sublist = expectKeys[start : start + BUGS_PER_QUERY]
+            sublist = expectKeys[start: start + BUGS_PER_QUERY]
             commaids = ",".join(sublist)
             if verbose:
-                print("Querying Bugzilla regarding " + str(len(sublist)) + " bugs which we expect to be open:")
-                print(commaids)
+                print "Querying Bugzilla regarding " + str(len(sublist)) + " bugs which we expect to be open:"
+                print commaids
             r = bugSearch("id=" + commaids + '&' + options.queryArgs + '&' + "&field0-0-0=resolution&type0-0-0=not_regex&value0-0-0=^$", bugzillaLoginPrefix)
             if r.get("error"):
                 print "Error from Bugzilla API:"
@@ -254,7 +261,7 @@ def main():
             whyShown = bug.get("resolution")
             if htmlOutput:
                 print ('<li style=margin-bottom:1em>%s: <a href="%s">Bug %s</a> -- %s' %
-                    (whyShown, "https://bugzilla.mozilla.org/show_bug.cgi?id="+id, id, cgi.escape(bug.get("summary"))))
+                       (whyShown, "https://bugzilla.mozilla.org/show_bug.cgi?id="+id, id, cgi.escape(bug.get("summary"))))
                 print '<ul>'
                 for message in expectList[id]:
                     print message
