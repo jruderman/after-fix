@@ -4,6 +4,10 @@ Create a configuration file with bugs and your corresponding after-fix tasks:
   # Take a nap
   bug 579522
 
+If you care about hidden bugs, create an API key from
+https://bugzilla.mozilla.org/userprefs.cgi?tab=apikey
+and put it in a file named ~/.after-fix
+
 Occasionally run "after-fix.py config-file" to find out which of the
 tracked bugs have been fixed.
 
