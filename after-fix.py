@@ -197,9 +197,14 @@ def main():
     verbose = options.verbose
     bugzillaLogin = options.bugzillaLogin
 
+    apiKeyFilename = os.path.join(os.path.expanduser("~"), ".after-fix")
+
     if bugzillaLogin:
         bugzillaPassword = getpass.getpass("Bugzilla password for %s: " % bugzillaLogin)
         bugzillaLoginPrefix = "username=" + urllib.quote_plus(bugzillaLogin) + "&password=" + urllib.quote_plus(bugzillaPassword) + "&"
+    elif os.path.exists(apiKeyFilename):
+        with open(apiKeyFilename) as f:
+            bugzillaLoginPrefix = "api_key=" + urllib.quote_plus(f.read().strip()) + "&"
     else:
         bugzillaLoginPrefix = ""
 
