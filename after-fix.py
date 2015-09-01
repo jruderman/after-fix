@@ -1,15 +1,15 @@
 #!/usr/bin/env python
-import sys
-import os
-import subprocess
-import fnmatch
-import glob
-import re
-import optparse
-import getpass
-import json
-import urllib
 import cgi
+import fnmatch
+import getpass
+import glob
+import json
+import optparse
+import os
+import re
+import subprocess
+import sys
+import urllib
 
 helpDescription = "Query Bugzilla for a set of bug numbers and show the ones that are fixed."
 
